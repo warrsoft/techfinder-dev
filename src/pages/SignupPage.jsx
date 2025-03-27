@@ -3,6 +3,8 @@ import { Button } from "../components/Button"
 import { PUBLIC_ROUTES } from "../constants/routes"
 import { useState } from "react";
 import profession from '../mocks/professions.json';
+import { ReactIcons } from "../components/ReactIcons"
+import { colors } from "../constants/colors"
 
 export function SignupPage () {
 
@@ -18,13 +20,13 @@ export function SignupPage () {
     }
 
     return (
-        <section className="flex flex-col gap-12 items-center justify-center w-xl mx-auto mb-4">
+        <section className="flex flex-col gap-6 items-center justify-center w-xl mx-auto mb-4">
             <h1 className="text-3xl md:text-4xl font-bold">Registrarse</h1>
             <div className="flex w-full items-center justify-center rounded-lg overflow-hidden">
                 <button onClick={() => handleUserType('user')} className={"w-full p-2 md:p-4 transition-all duration-500 ease-in-out md:text-lg cursor-pointer" + " " + userClass}>Usuario</button>
                 <button onClick={() => handleUserType('tech')} className={"w-full p-2 md:p-4 transition-all duration-500 ease-in-out md:text-lg cursor-pointer" + " " + techClass}>Técnico</button>
             </div>
-            <form className="w-full flex flex-col gap-4">
+            <form className="w-full flex flex-col gap-6">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                     <div className="flex flex-col gap-2 w-full">
                     <label className="text-lg md:text-xl font-bold">Nombre</label>
@@ -63,6 +65,10 @@ export function SignupPage () {
             </form>
             <span className="w-full flex gap-1 justify-end">Ya tienes cuenta? <a className="cursor-pointer text-marian-blue" onClick={() => navigate(PUBLIC_ROUTES.WELCOME + PUBLIC_ROUTES.LOGIN)}>Inicia Sesión</a></span>
             <Button model="dark" size={'w-full'} text={'Acceder'}  />
+            <button className="bg-blue-600 text-light w-full p-4 font-bold text-lg rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-all duration-200 ease-in-out cursor-pointer hover:scale-101">
+                <ReactIcons name={"google"} color={colors.light} size={25}/>
+                Registrarse con Google
+            </button>
         </section>
     )
 }
