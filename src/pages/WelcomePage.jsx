@@ -3,13 +3,32 @@ import { Button } from "../components/Button";
 import { ProfessionPil } from "../components/ProfessionPil.jsx";
 import { TechnicalCard } from "../components/TechnicalCard.jsx"
 import { PUBLIC_ROUTES } from "../constants/routes.js";
-import professions from '../mocks/professions.json'
+import { useEffect, useState } from "react";
+import Storage from "../storage/app-storage.js"
 
 export function WelcomePage () {
 
     const navigate = useNavigate()
 
-    const professionsToShow = professions.slice(0, 15)
+    const [professions, setProfessions] = useState([]);
+
+    useEffect(() => {
+            const shuffle = (array) => {
+                array.sort(() => Math.random() - 0.5);
+                return array;
+            }
+            const fetchProfessions = async () => {
+                const professions = await Storage.getProfessions();
+                if (professions) {
+                    setProfessions(shuffle(professions).slice(0, 15));
+                } else {
+                    console.error('Error fetching professions');
+                }
+            };
+            fetchProfessions();
+        }, []);
+
+    
 
     return (
         <section className="flex flex-col items-center justify-center gap-10 p-4 text-center max-w-6xl">
@@ -20,7 +39,7 @@ export function WelcomePage () {
             <main className="flex flex-col items-center justify-center gap-8">
                 <Button handleClick={() => navigate(PUBLIC_ROUTES.SIGNUP)} size='w-40' text='Comenzar' model="dark"/>
                 <div className="flex flex-wrap gap-2 w-full justify-center">
-                    {professionsToShow.map((profession, index) => <ProfessionPil key={index} profession={profession.name} />)}
+                    {professions.map((item) => <ProfessionPil key={item.id} profession={item.profession} />)}
                 </div>
             </main>
             <footer className="flex flex-wrap gap-4 justify-center">

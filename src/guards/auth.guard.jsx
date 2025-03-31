@@ -1,16 +1,17 @@
-import { Navigate } from "react-router"
+import { Navigate, Outlet } from "react-router"
 import { useAuth } from "../auth/auth"
 import { PUBLIC_ROUTES } from "../constants/routes.js"
 
 
-const PrivateRoute = ({ children }) => {
-    const { isAuthenticated } = useAuth();
+const PrivateRoute = () => {
 
-    if(!isAuthenticated) {
-        return <Navigate to={PUBLIC_ROUTES.LOGIN}/>
-    };
+    const { user, loading } = useAuth()
 
-    return children
+
+    if(loading) return <div>Loading...</div>
+
+    return user ? <Outlet /> : <Navigate to={PUBLIC_ROUTES.LOGIN} />
+
 };
 
 export default PrivateRoute
