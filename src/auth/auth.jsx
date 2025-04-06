@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
-import { supabase } from "../services/supabase";
+import { useNavigate } from "react-router";
+import Storage from "../storage/app-storage.js";
+import { supabase } from "../services/supabase.js";
 
 const AuthContext = createContext();
 
@@ -10,37 +12,54 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
+    const [session, setSession] = useState(null);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user ?? null);
-            setLoading(false);
-        }
 
-        getSession();
+        const initAuth = async () => {
+            const session = await Storage.getSession();
 
-        const { data: { subscription }} = supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN') {
-                setUser(session?.user ?? null)
-            } else if (event === 'SIGNED_OUT') {
-                setUser(null)
-                window.location.reload()
-            } else if (event === 'TOKEN_REFRESHED') {
-                setUser(session?.user ?? null)
+            if(session) {
+                setSession(session);
+
+                const user = await Storage.getCurrentUser();
+
+                if(user) {
+                    setUser(user);
+                } else {
+                    setUser(null);
+                }
+            } else {
+                setSession(null);
             }
-            setLoading(false)
+
+            setLoading(false);
+        };
+
+        initAuth();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if(event === 'SIGNED_IN') {
+                setSession(session.user);
+            } else if(event === 'SIGNED_OUT') {
+                setSession(null);
+                setUser(null);
+            }
+            setLoading(false);
         })
 
         return () => {
-            subscription.unsubscribe()
+            subscription.unsubscribe();
         }
-    }, [])
+
+    }, [navigate])
 
     return (
-        <AuthContext.Provider value={{user, loading}}>
+        <AuthContext.Provider value={{ user, session, loading}}>
             { children }
         </AuthContext.Provider>
     );

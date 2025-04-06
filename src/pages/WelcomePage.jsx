@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
 import { Button } from "../components/Button";
 import { ProfessionPil } from "../components/ProfessionPil.jsx";
-import { TechnicalCard } from "../components/TechnicalCard.jsx"
 import { PUBLIC_ROUTES } from "../constants/routes.js";
 import { useEffect, useState } from "react";
 import Storage from "../storage/app-storage.js"
@@ -31,23 +30,30 @@ export function WelcomePage () {
     
 
     return (
-        <section className="flex flex-col items-center justify-center gap-10 p-4 text-center max-w-6xl">
+        <section className="flex flex-col items-center justify-center gap-20 p-4 text-center max-w-6xl overflow-hidden">
             <header className="flex flex-col items-center justify-center gap-4">
                 <h1 className="font-bold text-4xl md:text-5xl">Bienvenido a TechFinder</h1>
                 <h3 >Encuentra técnicos experimentados para todas tus necesidades</h3>
             </header>
-            <main className="flex flex-col items-center justify-center gap-8">
-                <Button handleClick={() => navigate(PUBLIC_ROUTES.SIGNUP)} size='w-40' text='Comenzar' model="dark"/>
+            <main className="flex flex-col items-center justify-center gap-10">
+                <Button handleClick={() => navigate(PUBLIC_ROUTES.SIGNUP.PATH)} size='w-40' text='Comenzar' model="dark"/>
                 <div className="flex flex-wrap gap-2 w-full justify-center">
-                    {professions.map((item) => <ProfessionPil key={item.id} profession={item.profession} />)}
+                    {professions.map((profession) => <ProfessionPil key={profession.id} profession={profession.name} />)}
                 </div>
             </main>
-            <footer className="flex flex-wrap gap-4 justify-center">
-                    <TechnicalCard avatar={"https://th.bing.com/th/id/OIP.zOGAknj6ivM3p2zbGwkDogHaHa?rs=1&pid=ImgDetMain"} name={"John Doe"} profession={"Electricista"} rating={4.5}/>
-                    <TechnicalCard avatar={"https://th.bing.com/th/id/OIP.zOGAknj6ivM3p2zbGwkDogHaHa?rs=1&pid=ImgDetMain"} name={"John Doe"} profession={"Electricista"} rating={4.5}/>
-                    <TechnicalCard avatar={"https://th.bing.com/th/id/OIP.zOGAknj6ivM3p2zbGwkDogHaHa?rs=1&pid=ImgDetMain"} name={"John Doe"} profession={"Electricista"} rating={4.5}/>
-                    <TechnicalCard avatar={"https://th.bing.com/th/id/OIP.zOGAknj6ivM3p2zbGwkDogHaHa?rs=1&pid=ImgDetMain"} name={"John Doe"} profession={"Electricista"} rating={4.5}/>
-                    <TechnicalCard avatar={"https://th.bing.com/th/id/OIP.zOGAknj6ivM3p2zbGwkDogHaHa?rs=1&pid=ImgDetMain"} name={"John Doe"} profession={"Electricista"} rating={4.5}/>
+            <footer className="flex gap-10 justify-center">
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <h4 className="text-lg font-bold">¿Tienes un problema?</h4>
+                    <p>Encuentra un técnico en tu área</p>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <h4 className="text-lg font-bold">¿Eres un técnico?</h4>
+                    <p>Únete a nuestra comunidad y encuentra clientes</p>
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <h4 className="text-lg font-bold">¿Eres una empresa?</h4>
+                    <p>Encuentra técnicos para tu equipo</p>
+                </div>
             </footer>
         </section>
     )
