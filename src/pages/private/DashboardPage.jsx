@@ -3,15 +3,20 @@ import { TechnicalCard } from "../../components/private/TechnicalCard.jsx"
 import { Map } from "../../components/private/Map.jsx"
 import { useEffect, useMemo, useState } from "react"
 import Storage  from "../../storage/app-storage.js"
-import { useTechFilter } from "../../contexts/TechFilterContext.jsx"
+import { RequestModal } from "../../components/private/RequestModal.jsx"
 
 export function DashboardPage () {
 
     const [techs, setTechs] = useState([])
+    const [techIdNewRequest, setTechIdNewRequest] = useState(null)
     const [professions, setProfessions] = useState([])
     const [provinces, setProvinces] = useState([])
 
-    const { filters, updateFilters } = useTechFilter()
+    const [modalShowed, setModalShowed] = useState(false)
+
+    const handleNewRequest = () => {
+        setModalShowed(true)
+    }
 
     useEffect(() => {
         const fetchTechs = async () => {
@@ -42,10 +47,13 @@ export function DashboardPage () {
         fetchTechs()
     }, [])
 
+    const requestModal = modalShowed ? <RequestModal setModalShowed={setModalShowed} techId={techIdNewRequest} /> : null
+
     const memoizedMap = useMemo(() => <Map techs={techs && techs} height={"h-full"} />, [techs])
 
     return (
-        <div className="w-full h-full flex flex-col gap-4 p-4">
+        <>
+            <div className="w-full h-full flex flex-col gap-4 p-4">
             <header className="flex gap-2 w-full itemns-center justify-end">
                 <select className="outline-none p-2 text-lg bg-light rounded-lg border border-primary">
                     <option value="0">Todas las profesiones</option>
@@ -74,8 +82,8 @@ export function DashboardPage () {
             </header>
             <main className="w-full h-full flex gap-4">
                 <div className="flex flex-col gap-4">
-                    {techs.map((tech, index) => (
-                        <TechnicalCard key={index} name={tech.businessName} professions={tech.professions} isPrivate />
+                    {techs.map((tech) => (
+                        <TechnicalCard key={tech.id} tech={tech} modalShowed={handleNewRequest} setTechIdNewRequest={setTechIdNewRequest} isPrivate />
                     ))}
                 </div>
                 <div className="w-full h-full">
@@ -83,5 +91,7 @@ export function DashboardPage () {
                 </div>
             </main>
         </div>
+        {requestModal}
+        </>
     )
 }

@@ -1,5 +1,6 @@
 export const mapperTechToDb = (tech) => {
     const mapperedTech = {
+        id: tech.id,
         business_name: tech.businessName,
         business_phone: tech.businessPhone,
         professions: tech.professions,
@@ -22,6 +23,7 @@ export const mapperTechToDb = (tech) => {
 
 export const mapperTechFromDb = (tech) => {
     const mapperedTech = {
+        id: tech.id,
         businessName: tech.business_name,
         businessPhone: tech.business_phone,
         professions: tech.professions,

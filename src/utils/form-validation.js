@@ -39,6 +39,14 @@ const techProfileValidation = z.object({
     role: z.number().default(2),
 })
 
+const requestValidation = z.object({
+    subject: z.string().nonempty('El asunto es requerido'),
+    description: z.string().nonempty('La descripción es requerida'),
+    techId: z.string().nonempty('El técnico es requerido'),
+    statusId: z.number().default(1),
+    userId: z.string(),
+})
+
 export const validateUserForm = (formData) => {
     return userProfileValidation.safeParse(formData)
 }
@@ -55,3 +63,6 @@ export const validatePartialTechForm = (formData) => {
     return techProfileValidation.partial().safeParse(formData)
 }
 
+export const validateRequestForm = (formData) => {
+    return requestValidation.safeParse(formData)
+}

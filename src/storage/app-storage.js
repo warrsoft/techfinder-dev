@@ -1,6 +1,7 @@
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '../constants/routes.js';
 import { mapperTechFromDb } from '../mappers/tech.mapper.js';
 import { mapperUserFromDb } from '../mappers/user.mapper.js';
+import { mapperRequestToDb, mapperRequestFromDb } from '../mappers/request.mapper.js';
 import { supabase } from '../services/supabase.js'
 
 const getProfessions = async () => {
@@ -195,6 +196,57 @@ const accessWithGoogle = async () => {
     return data;
 }
 
+const deleteRequest = async (requestId) => {
+    const { data, error } = await supabase.from('requests').delete().eq('id', requestId).select('*');
+    if (error) {
+        console.error('Error deleting request:', error);
+        return null;
+    }
+    return data;
+}
+
+const getRequestByUserId = async () => {
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const { data, error } = await supabase.from('requests').select('id, subject, description, created_at, last_modified, status:status (id, name), user_id, tech_id (id, businessName:business_name)').eq('user_id', session.user.id).order('created_at', { ascending: false });
+    if (error) {
+        console.error('Error fetching requests:', error);
+        return null;
+    }
+
+    const mapperedData = data.map((request) => (
+        mapperRequestFromDb(request)
+    ))
+
+    return mapperedData;
+}
+
+const getRequestByTechId = async () => {;
+    const { data: { session } } = await supabase.auth.getSession();
+    const { data, error } = await supabase.from('requests').select('id, subject, description, created_at, last_modified, status:status (id, name), user_id, tech_id (id, businessName:business_name)').eq('tech_id', session.user.id).order('created_at', { ascending: false });
+    if (error) {
+        console.error('Error fetching requests:', error);
+        return null;
+    }
+
+    const mapperedData = data.map((request) => (
+        mapperRequestFromDb(request)
+    ))
+
+    return mapperedData;
+}
+
+
+const createRequest = async (request) => {
+    const mapperedData = mapperRequestToDb(request);
+    const { data, error } = await supabase.from('requests').insert([mapperedData]).select('*');
+    if (error) {
+        console.error('Error creating request:', error);
+        return null;
+    }
+    return data;
+}
+
 export default {
     getProfessions,
     accessWithGoogle,
@@ -208,5 +260,9 @@ export default {
     signOut,
     getRandomAvatar,
     getTechs,
-    updateUser
+    updateUser,
+    getRequestByUserId,
+    getRequestByTechId,
+    createRequest,
+    deleteRequest
 }

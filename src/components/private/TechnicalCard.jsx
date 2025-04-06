@@ -1,9 +1,14 @@
 import { ProfessionPil } from "../ProfessionPil";
 import { ReactIcons } from "../ReactIcons";
 
-export function TechnicalCard ({ avatar = null, name, professions = [], rating, isPrivate = false }) {
+export function TechnicalCard ({ avatar = null, tech, isPrivate = false, modalShowed, setTechIdNewRequest }) {
 
-    if(!name) return null
+    if(!tech) return null
+
+    const handleNewRequest = () => {
+        setTechIdNewRequest(tech.id)
+        modalShowed()
+    }
 
     return (
         <article className="flex items-center justify-between gap-4 p-4 bg-white shadow-md rounded-xl w-100">
@@ -12,24 +17,24 @@ export function TechnicalCard ({ avatar = null, name, professions = [], rating, 
                 {!isPrivate && (
                     <img src={avatar} className="w-30" alt="" />
                 )}
-                    <h3 className="font-bold text-xl">{name}</h3>
+                    <h3 className="font-bold text-xl">{tech.businessName}</h3>
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                    {professions.map((profession) => (
+                    {tech.professions.map((profession) => (
                     <ProfessionPil key={profession.id} profession={profession.name} />
                     ))}
                 </div>
-                {rating > 0 && (
+                {tech.rating > 0 && (
                     <div className="flex items-center gap-2">
                         <ReactIcons name='star' size={20} color='yellow'/>
-                        <span>{rating}/5</span>
+                        <span>{tech.rating}/5</span>
                     </div>
                 )}
                 </div>
                 {isPrivate && (
                     <div className="flex flex-col gap-2">
                         <button className="bg-primary text-secondary p-2 font-bold flex items-center justify-center rounded-xl w-full h-full cursor-pointer">Ver Perfil</button>
-                        <button className="bg-primary text-secondary p-2 font-bold flex items-center justify-center rounded-xl w-full h-full cursor-pointer">Solicitar Servicio</button>
+                        <button onClick={handleNewRequest} className="bg-primary text-secondary p-2 font-bold flex items-center justify-center rounded-xl w-full h-full cursor-pointer">Solicitar Servicio</button>
                     </div>
                 )}
         </article>
