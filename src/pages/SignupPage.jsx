@@ -7,7 +7,7 @@ import { colors } from "../constants/colors"
 import Storage from "../storage/app-storage.js"
 import { validateTechForm, validateUserForm } from "../utils/form-validation.js";
 import { ROLES } from "../constants/roles.js";
-import { Map } from "../components/private/Map.jsx"
+import { LeafLetMap } from "../components/private/LeafLetMap.jsx"
 import { mapperUserToDb } from "../mappers/user.mapper.js";
 import { mapperTechToDb } from "../mappers/tech.mapper.js";
  
@@ -89,7 +89,7 @@ export function SignupPage () {
         }
     }
 
-    const memoizedMap = useMemo(() => <Map location={location} setLocation={setLocation} />, [location])
+    const memoizedMap = useMemo(() => <LeafLetMap location={location} setLocation={setLocation} />, [location])
 
     const handleUserSubmit = async (e) => {
         e.preventDefault()

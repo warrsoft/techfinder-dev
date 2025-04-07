@@ -1,6 +1,6 @@
 import "leaflet/dist/leaflet.css"
 import { TechnicalCard } from "../../components/private/TechnicalCard.jsx"
-import { Map } from "../../components/private/Map.jsx"
+import { LeafLetMap } from "../../components/private/LeafLetMap.jsx"
 import { useEffect, useMemo, useState } from "react"
 import Storage  from "../../storage/app-storage.js"
 import { RequestModal } from "../../components/private/RequestModal.jsx"
@@ -46,7 +46,7 @@ export function DashboardPage () {
 
     const requestModal = modalShowed ? <RequestModal setModalShowed={setModalShowed} techId={techIdNewRequest} /> : null
 
-    const memoizedMap = useMemo(() => <Map techs={filteredTechs && filteredTechs} height={"h-full"} />, [filteredTechs])
+    const memoizedMap = useMemo(() => <LeafLetMap techs={filteredTechs && filteredTechs} height={"h-full"} />, [filteredTechs])
 
     return (
         <>

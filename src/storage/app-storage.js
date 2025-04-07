@@ -118,6 +118,27 @@ const getSession = async () => {
     return data.session;
 }
 
+const getTechById = async (techId) => {
+    const techs = localStorage.getItem('techs');
+    if (techs) {
+        const parsedTechs = JSON.parse(techs);
+        const tech = parsedTechs.find((tech) => tech.id === techId);
+        if (tech) {
+            return tech;
+        }
+    }
+
+    const { data, error } = await supabase.from('techs').select('*').eq('id', techId).single();
+    if (error) {
+        console.error('Error fetching tech:', error);
+        return null;
+    }
+
+    const mapperedData = mapperTechFromDb(data);
+
+    return mapperedData;
+}
+
 const getCurrentUser = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     const { data, error } = await supabase.from('users').select('*').eq('id', session.user.id).single();
@@ -306,5 +327,6 @@ export default {
     deleteRequest,
     getRequestStatus,
     updateRequest,
-    getUserById
+    getUserById,
+    getTechById
 }

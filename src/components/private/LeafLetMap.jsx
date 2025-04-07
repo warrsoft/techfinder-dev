@@ -11,8 +11,9 @@ const LocationSelector = ({ onLocationSelect }) => {
 }
 
 const getCurrentLocation = () => {
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
+    const response = navigator.geolocation;
+    if(response) {
+        response.geolocation?.getCurrentPosition((position) => {
             if (position && position.coords) {
                 return { lat: position.coords.latitude, lng: position.coords.longitude };
             }
@@ -21,7 +22,7 @@ const getCurrentLocation = () => {
     }
 }
 
-export function Map ({ location = null, setLocation, height, techs = null }) {
+export function LeafLetMap ({ location = null, setLocation, height, techs = null }) {
 
     const locationParam = location || getCurrentLocation() || { lat: 18.9359, lng: -70.1627 };
 
@@ -44,11 +45,10 @@ export function Map ({ location = null, setLocation, height, techs = null }) {
                             {tech.rating > 0 && <p>Rating: {tech.rating}</p>}
                         </div>
                         </div>
-                        
                     </Popup>
                 </Marker>
             ))}
-            {location && <Marker position={location} />}
+            {locationParam && <Marker position={locationParam} />}
         </MapContainer>
     )
 }
