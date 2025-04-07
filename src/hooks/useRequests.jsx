@@ -15,7 +15,7 @@ export const useRequests = (role) => {
       } else if (role === ROLES.TECH) {
         data = await Storage.getRequestByTechId();
       }
-
+      
     if (!data) {
       console.error("Error fetching requests:");
     } else {
@@ -24,6 +24,7 @@ export const useRequests = (role) => {
   };
 
   useEffect(() => {
+
     fetchRequests();
 
     const channel = supabase
@@ -36,7 +37,9 @@ export const useRequests = (role) => {
     return () => {
       supabase.removeChannel(channel);
     };
+
   }, []);
+  
 
   return requests;
 };

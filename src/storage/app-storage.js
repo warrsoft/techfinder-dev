@@ -20,6 +20,22 @@ const getProfessions = async () => {
     return data;
 }
 
+const getRequestStatus = async () => {
+    const requestsStatus = localStorage.getItem('requestsStatus');
+    if (requestsStatus) {
+        return JSON.parse(requestsStatus);
+    }
+    const { data, error } = await supabase.from('request_status').select('*');
+    if (error) {
+        console.error('Error fetching requests status:', error);
+        return null;
+    }
+    if (data) {
+        localStorage.setItem('requestsStatus', JSON.stringify(data));
+    }
+    return data;
+}
+
 const getProvinces = async () => {
     const provinces = localStorage.getItem('provinces');
     if (provinces) {
@@ -247,6 +263,29 @@ const createRequest = async (request) => {
     return data;
 }
 
+const updateRequest = async (requestId, request) => {
+    const mapperedData = mapperRequestToDb(request);
+    console.log(mapperedData);
+    const { data, error } = await supabase.from('requests').update(mapperedData).eq('id', requestId).select('*');
+    if (error) {
+        console.error('Error updating request:', error);
+        return null;
+    }
+    return data;
+}
+
+const getUserById = async (userId) => {
+    const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
+
+    const mapperedData = mapperUserFromDb(data);
+
+    if (error) {
+        console.error('Error fetching user:', error);
+        return null;
+    }
+    return mapperedData;
+}
+
 export default {
     getProfessions,
     accessWithGoogle,
@@ -264,5 +303,8 @@ export default {
     getRequestByUserId,
     getRequestByTechId,
     createRequest,
-    deleteRequest
+    deleteRequest,
+    getRequestStatus,
+    updateRequest,
+    getUserById
 }

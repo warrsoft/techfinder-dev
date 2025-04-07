@@ -1,28 +1,16 @@
-import { useState } from "react"
-import { Button } from "../../components/Button.jsx"
 import { Request } from "../../components/private/Request.jsx"
-import { RequestModal } from "../../components/private/RequestModal.jsx"
 import { useRequests } from "../../hooks/useRequests.jsx"
 import { ROLES } from "../../constants/roles.js"
 
 export function WorkPage () {
 
-    const [modalShowed, setModalShowed] = useState(false)
-    const [isEdit, setIsEdit] = useState(false)
     const requests = useRequests(ROLES.TECH)
-
-    const handleNewRequest = () => {
-        setModalShowed(true)
-    }
-
-    const requestModal = modalShowed ? <RequestModal setModalShowed={setModalShowed} edit={isEdit} /> : null
 
     return (
         <>
             <div className="w-full flex flex-col gap-4 p-4 overflow-y-auto">
             <header className="w-full flex justify-between items-center">
                 <h1 className="font-bold text-2xl">Mis Trabajos</h1>
-                <Button handleClick={handleNewRequest} text={"Nueva Solicitud"}  model="dark" />
             </header>
             <main>
                 <div className="grid grid-cols-6 items-center justify-between p-4 bg-light rounded-2xl shadow-md gap-2 font-bold">
@@ -40,7 +28,6 @@ export function WorkPage () {
                 </div>
             </main>
         </div>
-            {requestModal}
         </>
     )
 }

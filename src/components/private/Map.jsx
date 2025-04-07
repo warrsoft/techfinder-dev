@@ -43,11 +43,6 @@ export function Map ({ location = null, setLocation, height, techs = null }) {
                             ))}
                             {tech.rating > 0 && <p>Rating: {tech.rating}</p>}
                         </div>
-
-                        <footer className="flex flex-col gap-2 justify-between items-center">
-                            <button className="bg-primary text-white p-2 rounded-lg w-full cursor-pointer">Ver perfil</button>
-                            <button className="bg-primary text-white p-2 rounded-lg w-full cursor-pointer">Solicitar Servicio</button>
-                        </footer>
                         </div>
                         
                     </Popup>

@@ -20,5 +20,6 @@ export const NotificationMessages = {
     professionCreated: "Profesión creada correctamente",
     professionUpdated: "Profesión actualizada correctamente",
     professionDeleted: "Profesión eliminada correctamente",
-    professionError: "Error al crear la profesión"
+    professionError: "Error al crear la profesión",
+    requestAlreadyTaken: "La solicitud ya no se encuentra en estado pendiente",
 }
